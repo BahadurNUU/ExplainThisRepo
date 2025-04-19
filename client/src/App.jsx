@@ -1,35 +1,69 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
+import { Container, Form, Button } from 'react-bootstrap';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [repoUrl, setRepoUrl] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Generating documentation for:', repoUrl);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem'
+    }}>
+      <Container style={{ maxWidth: '800px' }}>
+        <h1 className="text-center mb-5" style={{ 
+          fontSize: '3.5rem', 
+          fontWeight: '600',
+          background: 'radial-gradient(141.42% 141.42% at 100% 0%,#fff6,#fff0),radial-gradient(140.35% 140.35% at 100% 94.74%,#bd34fe,#bd34fe00),radial-gradient(89.94% 89.94% at 18.42% 15.79%,#41d1ff,#41d1ff00)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          textFillColor: 'transparent'
+        }}>
+          Generate Docs from GitHub
+        </h1>
+        <Form onSubmit={handleSubmit} className="bg-white p-4 rounded-3" style={{
+          boxShadow: '0 0 40px rgba(255, 255, 255, 0.5), 0 0 60px rgba(189, 52, 254, 0.2), 0 0 80px rgba(65, 209, 255, 0.1)',
+          border: '1px solid rgba(255, 255, 255, 0.3)'
+        }}>
+          <Form.Group className="mb-3">
+            <Form.Label className="fw-bold">GitHub Repository URL</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="https://github.com/username/repository"
+              value={repoUrl}
+              onChange={(e) => setRepoUrl(e.target.value)}
+              required
+              className="py-2"
+            />
+            <Form.Text className="text-muted">
+              Paste the URL of the GitHub repository you want to document
+            </Form.Text>
+          </Form.Group>
+          <div className="d-grid">
+            <Button 
+              variant="primary" 
+              type="submit" 
+              size="lg"
+              className="py-2 main-btn"
+            >
+              Generate Documentation
+            </Button>
+          </div>
+        </Form>
+      </Container>
+    </div>
+  );
 }
 
 export default App
