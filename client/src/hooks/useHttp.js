@@ -22,8 +22,9 @@ export const useHttp = () => {
         throw new Error('Request failed!');
       }
 
-      const responseData = await response.json();
-      return responseData
+      const data = await response.json();
+      return data;
+
     } catch (err) {
       setError(err.message || 'Something went wrong!');
     } finally {

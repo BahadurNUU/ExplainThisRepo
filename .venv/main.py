@@ -101,21 +101,24 @@ def scan_project(repo_path):
     return file_summary
 
 def generate_readme_summary(file_list, repo_path):
-    prompt = f"""You are an expert developer. Based on the following file structure and content analysis, generate a detailed README.md for this project.
+    prompt = f"""
+        You are a professional readme documentation generator. 
+        Your task is to write a detailed explanation of the provided files.
+        Make sure the documentation is clear and structured.
+        The documentation has to be written in Markdown format.
+        Follow Google's Markdown style guide.
+        Important: Do not write any comments. Do not start with "```". 
+        You need to return only the markdown itself.
+        The documentation has to include:
+        -Project title,
+        -Description of the project,
+        -Description of what each file does,
+        -Tech Stack used
+        Files: {chr(10).join([f"File: {file['file_path']} | Functions: {', '.join(file['functions'])} | Classes: {', '.join(file['classes'])}" for file in file_list])}
+    """
 
-Project files and their content:
-{chr(10).join([f"File: {file['file_path']} | Functions: {', '.join(file['functions'])} | Classes: {', '.join(file['classes'])}" for file in file_list])}
-
-The README should include:
-- Project title
-- Description of what each file does
-- Installation instructions
-- Usage examples
-- Technologies used
-- License section (guess if possible)
-- Contribution guidelines
-
-Be creative and helpful. Do not just write an overview. Provide details of the functionality from the code itself."""
+    # print('What is this?\n')
+    print(''.join([f"File: {file['file_path']} | Functions: {', '.join(file['functions'])} | Classes: {', '.join(file['classes'])}" for file in file_list]))
 
     model = genai.GenerativeModel('gemini-2.0-flash')
     response = model.generate_content(prompt)
@@ -139,7 +142,7 @@ def main():
         file_list = scan_project(repo_path)
         print(f"Scanned {len(file_list)} files")
 
-        readme_content = generate_readme_summary(file_list, repo_path)
+        readme_content = generate_readme_summary(file_list)
         print("Generated README.md content")
 
         save_readme(readme_content, repo_path)
