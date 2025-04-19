@@ -6,9 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_KEY = os.environ['GEMINI_API_KEY']
+API_KEY = os.environ['API_KEY']
 
-print(API_KEY)
 
 genai.configure(api_key=API_KEY)
 
@@ -58,7 +57,7 @@ def scan_project(repo_path):
 
 
 def generate_readme_summary(file_list, repo_path):
-    prompt = f"""You are an expert developer. Based on the following file structure, generate a professional README.md for this project.
+    prompt = f"""You are an expert developer. Based on the following file structure, generate a detailed README.md for this project.
 
 Project files:
 {chr(10).join(file_list)}
@@ -72,7 +71,7 @@ The README should include:
 - License section (guess if possible)
 - Contribution guidelines
 
-Be creative and helpful."""
+Be creative and helpful. Do not just write an overview,  You should cover project's every important detail."""
 
     model = genai.GenerativeModel('gemini-2.0-flash')
     response = model.generate_content(prompt)
@@ -86,13 +85,3 @@ def save_readme(content, repo_path):
     print(f"README.md saved to {readme_path}")
 
 
-# def main():
-#     github_url = input("Enter GitHub repository URL: ").strip()
-#     repo_path = clone_git_repo(github_url)
-#     file_list = scan_project(repo_path)
-#     readme_content = generate_readme_summary(file_list, repo_path)
-#     save_readme(readme_content, repo_path)
-#
-#
-# if __name__ == "__main__":
-#     main()
