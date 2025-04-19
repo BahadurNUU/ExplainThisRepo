@@ -2,9 +2,15 @@ import os
 import git
 import os
 import google.generativeai as genai
+from dotenv import load_dotenv
 
+load_dotenv()
 
-genai.configure(api_key="AIzaSyClxuD2-7qPOqCb9ZmRi1i_IbSIsNqVU7A")
+API_KEY = os.environ['GEMINI_API_KEY']
+
+print(API_KEY)
+
+genai.configure(api_key=API_KEY)
 
 def clone_git_repo(github_url, clone_dir="cloned_repo"):
     repo_name = github_url.split("/")[-1].replace(".git", "")
@@ -80,13 +86,13 @@ def save_readme(content, repo_path):
     print(f"README.md saved to {readme_path}")
 
 
-def main():
-    github_url = input("Enter GitHub repository URL: ").strip()
-    repo_path = clone_git_repo(github_url)
-    file_list = scan_project(repo_path)
-    readme_content = generate_readme_summary(file_list, repo_path)
-    save_readme(readme_content, repo_path)
-
-
-if __name__ == "__main__":
-    main()
+# def main():
+#     github_url = input("Enter GitHub repository URL: ").strip()
+#     repo_path = clone_git_repo(github_url)
+#     file_list = scan_project(repo_path)
+#     readme_content = generate_readme_summary(file_list, repo_path)
+#     save_readme(readme_content, repo_path)
+#
+#
+# if __name__ == "__main__":
+#     main()

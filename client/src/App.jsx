@@ -1,14 +1,51 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import { Container, Form, Button } from 'react-bootstrap';
+import { useHttp } from './hooks/useHttp.js'
+import {toast, ToastContainer} from 'react-toastify'
 
 function App() {
   const [repoUrl, setRepoUrl] = useState('');
+  const { loading, error, clearError, request } = useHttp();
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      console.log('Error caught in useEffect: ', error);
+      clearError()
+    }
+  }, [error])
+
+
+  const isValidLink = (url) => {
+    const regex = /^https:\/\/github\.com\/([A-Za-z0-9_-]+)\/([A-Za-z0-9_-]+)$/;
+    return regex.test(url);
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Generating documentation for:', repoUrl);
+
+    if (!repoUrl.trim()) {
+      toast.error('Please fill in the repository URL');
+      return;
+    }
+
+    if (isValidLink(repoUrl)) {
+      toast.error('Please enter a valid GitHub repository URL');
+      return;
+    };
+
+    try {
+      const data = await request('/api/process-repo', 'POST', { repo_url: repoUrl });
+      if (data) {
+        console.log('Data received from server:', data);
+      }
+    } catch (error) {
+      console.log('Catch error while making a request ', error.message);
+      toast.error('Error while generating documentation');
+    }
+    
   };
 
   return (
@@ -56,12 +93,14 @@ function App() {
               type="submit" 
               size="lg"
               className="py-2 main-btn"
+              disabled={loading}
             >
               Generate Documentation
             </Button>
           </div>
         </Form>
       </Container>
+      <ToastContainer />
     </div>
   );
 }
