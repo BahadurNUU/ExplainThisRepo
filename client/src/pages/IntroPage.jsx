@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useHttp } from '../hooks/useHttp'
 import { toast, ToastContainer } from 'react-toastify'
-import { Container, Form, Button } from 'react-bootstrap'
+import { Container, Form, Button, Spinner } from 'react-bootstrap'
 import { useNavigate } from 'react-router'
 
 export default function IntroPage() {
@@ -101,9 +101,16 @@ export default function IntroPage() {
               type="submit" 
               size="lg"
               className="py-2 main-btn"
-              disabled={loading}
             >
               Generate Documentation
+              {loading && <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+                style={{marginLeft: '0.5rem'}}
+             />}
             </Button>
           </div>
         </Form>
