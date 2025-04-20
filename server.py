@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 import shutil
 import uuid
 import os
@@ -32,3 +33,12 @@ async def process_repo(data: RepoRequest):
             status_code=500,
             content={"error": str(e)}
         )
+
+
+app.mount("/", StaticFiles(directory="client/dist", html=True), name="static")
+
+# Optional: fallback to index.html for SPA routing
+@app.get("/{full_path:path}")
+async def catch_all(full_path: str):
+    file_path = os.path.join("client/dist", "index.html")
+    return FileResponse(file_path)
