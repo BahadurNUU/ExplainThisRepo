@@ -1,7 +1,7 @@
 import subprocess
 
 # Start FastAPI backend
-backend = subprocess.Popen(["uvicorn", "server:app", "--reload"], cwd=".venv")
+backend = subprocess.Popen(["uvicorn", "server:app", "--reload"])
 
 # Start React frontend
 frontend = subprocess.Popen(["npm", "run", "dev"], cwd="client")
