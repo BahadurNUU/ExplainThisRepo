@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 import shutil
 import uuid
 import os
+from utils import clear_markdown
 
 from main import clone_git_repo, scan_project, generate_docs
 
@@ -22,6 +23,7 @@ async def process_repo(data: RepoRequest):
         repo_path = clone_git_repo(data.repo_url, clone_dir=temp_folder)
         file_list = scan_project(repo_path)
         readme_content = generate_docs(file_list)
+        readme_content = clear_markdown(readme_content)
 
         # Clean up
         shutil.rmtree(repo_path)
