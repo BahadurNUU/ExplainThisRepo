@@ -1,11 +1,28 @@
 import { useLocation } from 'react-router'
 import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm';
+import remarkGfm from 'remark-gfm'
 import { Button } from 'react-bootstrap'
+
 
 export default function DocPage() {
   const location = useLocation();
   const { data: { markdown } } = location.state || {};
+
+  const handleDownload = () => {
+    if (!markdown) return;
+  
+    const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+  
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'documentation.md';
+    document.body.appendChild(link);
+    link.click();
+  
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="doc-page" style={{
@@ -21,6 +38,7 @@ export default function DocPage() {
             <Button 
               variant="outline-light" 
               className="main-btn"
+              onClick={handleDownload}
             >
               Download Markdown
             </Button>

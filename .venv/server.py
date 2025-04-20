@@ -5,7 +5,7 @@ import shutil
 import uuid
 import os
 
-from main import clone_git_repo, scan_project, generate_readme_summary
+from main import clone_git_repo, scan_project, generate_docs
 
 app = FastAPI()
 
@@ -20,7 +20,7 @@ async def process_repo(data: RepoRequest):
 
         repo_path = clone_git_repo(data.repo_url, clone_dir=temp_folder)
         file_list = scan_project(repo_path)
-        readme_content = generate_readme_summary(file_list, repo_path)
+        readme_content = generate_docs(file_list)
 
         # Clean up
         shutil.rmtree(repo_path)

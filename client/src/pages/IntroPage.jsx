@@ -42,7 +42,11 @@ export default function IntroPage() {
       if (data) {
         toast.success('Documentation generated successfully')
         setRepoUrl('')
-        navigate('/doc', { state: { data } })
+        setTimeout(() => {
+          toast.info('Redirecting to documentation...')
+          navigate('/doc', { state: { data } })
+        }
+        , 1000)
       }
 
     } catch (error) {
